@@ -10,7 +10,7 @@ app.use(express.static('public'))
 
 // main page
 app.get('/', function(req, res) {
-  res.sendFile('index.html')
+  res.sendFile(__dirname+'/public/open.html')
 })
 
 // list of diagrams
