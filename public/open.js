@@ -39,7 +39,7 @@ class Buttons extends React.Component {
 
 class CreateButton extends React.Component {
   render() {
-    return e('button', {}, "Create")
+    return e('button', {onClick: () => { location = "/edit" }}, "Create")
   }
 }
 
@@ -50,7 +50,7 @@ class OpenButton extends React.Component {
     this.state = {list: props.list/*, enabled: (size === 1) ? true : false*/}
 }
   render () {
-    return (this.state.list.filter(e => e.enabled).length === 1) ? e('button', {disabled: false}, "Open"): e('button', {disabled: true}, "Open");
+    return (this.state.list.filter(e => e.enabled).length === 1) ? e('button', {disabled: false, onClick: () => { location = `/edit?name=${this.state.list.filter(e => e.enabled)[0].name}` }}, "Open"): e('button', {disabled: true}, "Open");
   }
 }
 
@@ -61,7 +61,8 @@ class CompareButton extends React.Component {
     this.state = {list: props.list/*, enabled: (size === 2) ? true : false*/}
   }
   render () {
-    return (this.state.list.filter(e => e.enabled).length === 2) ? e('button', {disabled: false}, "Compare"): e('button', {disabled: true}, "Compare");
+    return (this.state.list.filter(e => e.enabled).length === 2) ? e('button', {disabled: false,
+      onClick: () => { location = `/diff?first=${this.state.list.filter(e => e.enabled)[0].name}&second=${this.state.list.filter(e => e.enabled)[1].name}` }}, "Compare"): e('button', {disabled: true}, "Compare");
   }
 }
 

@@ -1,7 +1,8 @@
 module.exports = {
   entry: {
     bundle: "./public/createBPMN.js",
-    "open-bundle": "./public/open.js"
+    "open-bundle": "./public/open.js",
+    "diff-bundle": "./public/diff.js"
   },
   output: {
     path: __dirname + '/public',
