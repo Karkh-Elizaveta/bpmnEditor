@@ -9,20 +9,10 @@ class Content extends React.Component {
   constructor (props) {
     super();
     this.state = {list: props.list}
-    //this.list = props.list;
   }
   render() {
-    return e("div", {}, e(Buttons, {list: this.state.list/*.filter(e => e.enabled)*/}, null), e(Previews, {list: this.state.list, callback: (name) => {
-      this.forceUpdate();
-      for(let i = 0; i < this.state.list.length; i++) {
-        if (this.state.list[i].name === name) {
-          /*let tsl = this.state.list;
-          tsl[i].enabled = !tsl[i].enabled;
-          this.setState({list: tsl})
-          console.log(this.state.list[i].enabled)*/
-        }
-      }
-    }}, null))
+    return e("div", {}, e(Buttons, {list: this.state.list}, null), e(Previews, {list: this.state.list, callback: (name) => {
+      this.forceUpdate()}}, null))
   }
 }
 
@@ -30,39 +20,37 @@ class Buttons extends React.Component {
   constructor (props) {
     super(props);
     this.state = {list: props.list}
-    //this.list = props.list;
   }
   render() {
-    return e("div", {}, e(CreateButton, {}, null), e(OpenButton, {list: this.state.list}, null), e(CompareButton, {list: this.state.list}, null))
+    return e('div', {}, e(CreateButton, {}, null), e(OpenButton, {list: this.state.list}, null), e(CompareButton, {list: this.state.list}, null))
   }
 }
 
 class CreateButton extends React.Component {
   render() {
-    return e('button', {onClick: () => { location = "/edit" }}, "Create")
+    return e('button', {onClick: () => { location = "/edit" }, className: "buttons buttons-left"}, "Create")
   }
 }
 
 class OpenButton extends React.Component {
   constructor(props) {
     super(props);
-    //let size = this.props.list.length;
-    this.state = {list: props.list/*, enabled: (size === 1) ? true : false*/}
+    this.state = {list: props.list}
 }
   render () {
-    return (this.state.list.filter(e => e.enabled).length === 1) ? e('button', {disabled: false, onClick: () => { location = `/edit?name=${this.state.list.filter(e => e.enabled)[0].name}` }}, "Open"): e('button', {disabled: true}, "Open");
+    return (this.state.list.filter(e => e.enabled).length === 1) ? e('button', {disabled: false, className: "buttons buttons-center", onClick: () => { location = `/edit?name=${this.state.list.filter(e => e.enabled)[0].name}` }}, "Open"):
+      e('button', {disabled: true, className: "buttons buttons-center"}, "Open");
   }
 }
 
 class CompareButton extends React.Component {
   constructor(props) {
     super(props);
-    //let size = this.props.list.length;
-    this.state = {list: props.list/*, enabled: (size === 2) ? true : false*/}
+    this.state = {list: props.list}
   }
   render () {
-    return (this.state.list.filter(e => e.enabled).length === 2) ? e('button', {disabled: false,
-      onClick: () => { location = `/diff?first=${this.state.list.filter(e => e.enabled)[0].name}&second=${this.state.list.filter(e => e.enabled)[1].name}` }}, "Compare"): e('button', {disabled: true}, "Compare");
+    return (this.state.list.filter(e => e.enabled).length === 2) ? e('button', {disabled: false, className: "buttons buttons-right",
+      onClick: () => { location = `/diff?first=${this.state.list.filter(e => e.enabled)[0].name}&second=${this.state.list.filter(e => e.enabled)[1].name}` }}, "Compare"): e('button', {disabled: true, className: "buttons buttons-right"}, "Compare");
   }
 }
 
@@ -92,11 +80,11 @@ class PreviewElement extends React.Component {
     this.state = {name: props.name, svg: props.svg, enabled: props.enabled, callback: props.callback}
   }
   render() {
-    return e("div", {}, e("div", {title: "куку", onClick: () => {this.state.callback(this.state.name)}, className: "svg-element"}, e("span", {dangerouslySetInnerHTML: {__html: this.state.svg}}, null)))
-    //return e('div', {onclick: this.state.callback}, (e('span', {}, this.state.name), e('div', {className: 'svg-element'}, e('span', {dangerouslySetInnerHTML: {__html: this.state.svg}}))))
+    return e("div", {}, e("div", {title: this.state.name, onClick: () => {this.state.callback(this.state.name)}, className: "svg-element"}, e("span", {dangerouslySetInnerHTML: {__html: this.state.svg}}, null)))
   }
 }
 
+// запрос на сервер типа get
 jquery.get('/list', (list) => {
   let elements = list.map(elem => { return {name: elem}});
   for (let i = 0; i < elements.length; i++) {
